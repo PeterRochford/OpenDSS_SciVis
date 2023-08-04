@@ -22,7 +22,7 @@ Note that the OpenDSS_SciVis package now only supports Python 3.
 
 Example Scripts
 ---------------------
-Refer to the "Examples" folder for a collection of example Python scripts showing how to produce plots in a variety of formats from the OpenDSS CSV files as described in the [Wiki Home page](http://github.com/kevinwu/OpenDSS_SciVis/wiki). There are multiple examples of time series that progress from very simple to more customized figures. These series of examples provide an easy tutorial on how to use the various options of the plotting functions. They also provide a quick reference in future for how to produce the plots with specific features. 
+Refer to the "Examples" folder for a collection of example Python scripts showing how to produce plots in a variety of formats from the OpenDSS CSV files as described in the [Wiki Home page](https://github.com/kevinwuw/OpenDSS_SciVis/wiki). There are multiple examples of time series that progress from very simple to more customized figures. These series of examples provide an easy tutorial on how to use the various options of the plotting functions. They also provide a quick reference in future for how to produce the plots with specific features. 
 
 Example Plots
 ---------------------
@@ -34,7 +34,7 @@ Here is a sample of the plots you'll find in the above examples: (REMAINS TO BE 
 
 FAQ
 ---------------------
-A list of Frequently Asked Questions ([FAQ](http://github.com/kevinwu/OpenDSS_SciVis/wiki/FAQ)) is maintained on the Wiki. Users are encouraged to look there for solutions to problems they may encounter when using the package. 
+A list of Frequently Asked Questions ([FAQ](https://github.com/kevinwuw/OpenDSS_SciVis/wiki/FAQ)) is maintained on the Wiki. Users are encouraged to look there for solutions to problems they may encounter when using the package. 
 
 How to cite OpenDSS_SciVis
 ---------------------
