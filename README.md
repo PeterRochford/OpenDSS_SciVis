@@ -28,9 +28,13 @@ Example Plots
 ---------------------
 The plots produced by the example scripts are in Portable Network Graphics (PNG) format and have the same file name as the script with a `.png` suffix. The PNG files created can be viewed by following the links shown below. This is a useful starting point for users looking to identify the best example from which to begin creating a diagram for their specific need by modifying the accompanying Python script.
 
-[Time Series Plots](http://github.com/kevinwu/OpenDSS_SciVis/wiki/Time-Series-Examples)
+[Time Series Plots](https://github.com/kevinwuw/OpenDSS_SciVis/wiki/Time-Series-Examples)
 
-Here is a sample of the plots you'll find in the above examples: (REMAINS TO BE DONE)
+Here is a sample of the plots you'll find in the above examples: 
+
+| | |
+| :-------------------------:|:-------------------------: |
+| multiple time series ![](https://github.com/kevinwuw/OpenDSS_SciVis/blob/main/Examples/example01.png) | single time series ![](https://github.com/kevinwuw/OpenDSS_SciVis/blob/main/Examples/example02.png) |
 
 FAQ
 ---------------------
