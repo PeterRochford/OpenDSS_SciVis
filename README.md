@@ -56,7 +56,7 @@ Guidelines to contribute
 ---------------------
 1. In the description of your Pull Request (PR) explain clearly what it implements/fixes and your changes. Possibly give an example in the description of the PR. 
 2. Give your pull request a helpful title that summarises what your contribution does. 
-3. Write unit tests for your code and make sure the existing [backward compatibility tests](http://github.com/kevinwu/OpenDSS_SciVis/wiki/Backward-Compatibility-Testing) pass. 
+3. Write unit tests for your code and make sure the existing [backward compatibility tests](https://github.com/kevinwuw/OpenDSS_SciVis/wiki/Backward-Compatibility-Testing) pass. 
 4. Make sure your code is properly commented and documented. Each public method needs to be documented as the existing ones.
 
 References
