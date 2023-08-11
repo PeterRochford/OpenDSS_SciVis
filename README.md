@@ -10,15 +10,15 @@ Features
 
 Installation
 ---------------------
-To install the package simply use the pip3 command: (REMAINS TO BE DONE)
+To install the package simply use the pip command: 
 
-`% pip3 install OpenDSS_SciVis`
+`% pip install OpenDSS_SciVis`
 
 If you are upgrading the package then include the upgrade option:
 
-`% pip3 install OpenDSS_SciVis --upgrade`
+`% pip install OpenDSS_SciVis --upgrade`
 
-Note that the OpenDSS_SciVis package now only supports Python 3. 
+Note that the OpenDSS_SciVis package only supports Python 3. 
 
 Example Scripts
 ---------------------
