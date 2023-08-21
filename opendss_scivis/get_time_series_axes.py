@@ -15,8 +15,8 @@ def get_time_series_axes(x,y,option):
     y       : values for y-axis
     option  : dictionary containing option values. (Refer to 
               get_time_series_plot_options function for more information.)
-    option['index_x'] : index for x values in option
-    option['index_y'] : index for y values in option
+    option['variable'] : name of variable for which time series is being plotted, 
+              e.g. 'Frequency'
     
     OUTPUTS:
     axes           : dictionary containing axes information for time series plot
@@ -30,14 +30,18 @@ def get_time_series_axes(x,y,option):
             Xator Corporation
             www.xatorcorp.com
     
-    Created on Apr 25, 2022
+    Created on Aug 17, 2023
     '''
 
     # Specify max & min for axes
     maxx, maxy = _getmax(option,x,y)
     minx, miny = _getmin(option,x,y)
     
-    option['axismax'].append(maxy)
+    key = option['variable']
+    if option['axislim'] is None: 
+        option['axislim'] = {key: [minx,maxx,miny,maxy]}
+    else:
+        option['axislim'][key] = [minx,maxx,miny,maxy]
 
     # Check if min & max the same within a tolerance
     equal = np.allclose(miny,maxy)
@@ -110,27 +114,6 @@ def get_time_series_axes(x,y,option):
     if len(option['yticklabelpos']) == 0:
         option['yticklabelpos'] = ytick
 
-    # # Set tick labels using provided tick label positions
-    # xlabel =[]; ylabel = [];
-    #
-    # # Set x tick labels
-    # for i in range(len(xtick)):
-    #     index = np.where(option['xticklabelpos'] == xtick[i])
-    #     if len(index) > 0:
-    #         label = get_axis_tick_label(xtick[i])
-    #         xlabel.append(label)
-    #     else:
-    #         xlabel.append('')
-    #
-    # # Set y tick labels
-    # for i in range(len(ytick)):
-    #     index = np.where(option['yticklabelpos'] == ytick[i])
-    #     if len(index) > 0:
-    #         label = get_axis_tick_label(ytick[i])
-    #         ylabel.append(label)
-    #     else:
-    #         ylabel.append('')
-    
     # Store output variables in data structure
     axes = {}
     axes['xtick'] = xtick
@@ -149,20 +132,19 @@ def _getmax(option,x,y):
     y       : values for y-axis
     option  : dictionary containing option values. (Refer to 
               get_time_series_plot_options function for more information.)
-    option['index_x'] : index for x values in option
-    option['index_y'] : index for y values in option
     option['plottype']        : type of x-y plot
                                 'linear', standard linear plot (Default)
                                 'loglog', log scaling on both the x and y axis
                                 'semilogx', log scaling on the x axis
                                 'semilogy', log scaling on the y axis
+    option['variable'] : name of variable for which time series is being plotted, 
+              e.g. 'Frequency'
     
     OUTPUTS:
     maxx : maximum for x axis
     maxy : maximum for y axis
     '''
-    index_x = option['index_x']
-    index_y = option['index_y']
+    key = option['variable']
 
     plottype = option['plottype']
     if plottype == "linear":
@@ -181,13 +163,10 @@ def _getmax(option,x,y):
     else:
         raise ValueError('Unknown option: ' + plottype)
         
-    if option['axislim'][index_x] is not None:
+    if option['axislim'] is not None and key in option['axislim']:
         # Axis limit is specified
-        maxx = option['axislim'][index_x+1]
-
-    if option['axislim'][index_y] is not None:
-        # Axis limit is specified
-        maxy = option['axislim'][index_y+2]
+        if option['axislim'][key][1] is not None: maxx = option['axislim'][key][1]
+        if option['axislim'][key][3] is not None: maxy = option['axislim'][key][3]
         
     return maxx, maxy
 
@@ -200,20 +179,19 @@ def _getmin(option,x,y):
     y       : values for y-axis
     option  : dictionary containing option values. (Refer to 
               get_time_series_plot_options function for more information.)
-    option['index_x'] : index for x values in option
-    option['index_y'] : index for y values in option
     option['plottype']        : type of x-y plot
                                 'linear', standard linear plot (Default)
                                 'loglog', log scaling on both the x and y axis
                                 'semilogx', log scaling on the x axis
                                 'semilogy', log scaling on the y axis
+    option['variable'] : name of variable for which time series is being plotted, 
+              e.g. 'Frequency'
     
     OUTPUTS:
     minx : minimum for x axis
     miny : minimum for y axis
     '''
-    index_x = option['index_x']
-    index_y = option['index_y']
+    key = option['variable']
 
     plottype = option['plottype']
     if plottype == "linear":
@@ -232,12 +210,9 @@ def _getmin(option,x,y):
     else:
         raise ValueError('Unknown option: ' + plottype)
         
-    if option['axislim'][index_x] is not None:
+    if option['axislim'] is not None and key in option['axislim']:
         # Axis limit is specified
-        minx = option['axislim'][index_x]
-
-    if option['axislim'][index_y] is not None:
-        # Axis limit is specified
-        miny = option['axislim'][index_y+1]
+        if option['axislim'][key][0] is not None: minx = option['axislim'][key][0]
+        if option['axislim'][key][2] is not None: miny = option['axislim'][key][2]
         
     return minx, miny
