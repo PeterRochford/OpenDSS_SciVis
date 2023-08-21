@@ -12,7 +12,7 @@ It supports the following arguments as options.
 They can be invoked from a command line as, for example, to not show the
 plot to allow batch execution: 
 
-$ python example01.py -noshow
+$ python example02.py -noshow
 
 All functions in the OpenDSS SciVis library are designed to only work with 
 one-dimensional arrays, e.g. time series of power system variables for a 
