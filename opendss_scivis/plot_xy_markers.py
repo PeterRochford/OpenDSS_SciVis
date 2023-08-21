@@ -15,12 +15,9 @@ def plot_xy_markers(X,Y,option):
     y       : function values at x-coordinates
     option  : dictionary containing option values. (Refer to 
               get_time_series_plot_options function for more information.)
-    option['axismax'] : maximum for the X & Y values. Used to limit maximum 
-                        range to display markers
-    option['axismin'] : minimum for the X & Y values. Used to limit minimum 
-                        range to display markers
-    option['index_x'] : index for x values in option
-    option['index_y'] : index for y values in option
+    option['axislim'] : axes limits for each subplot provided as a dictionary,
+                       [xmin, xmax, ymin, ymax], e.g. for a subplot of the 
+                       variable Frequency: option['axislim]['Frequency'].
 
     OUTPUTS:
     None
@@ -30,10 +27,13 @@ def plot_xy_markers(X,Y,option):
             www.xatorcorp.com
 
     Created on May 1, 2022
+    Revised on Aug 19, 2023
     '''
-    
-    index_x = option['index_x']
-    index_y = option['index_y']
+    key = option['variable']
+    minx = option['axislim'][key][0]
+    maxx = option['axislim'][key][1]
+    miny = option['axislim'][key][2]
+    maxy = option['axislim'][key][3]
 
     # Set face color transparency
     alpha = option['alpha']
@@ -77,11 +77,11 @@ def plot_xy_markers(X,Y,option):
                     markercolor.append(rgba)
         
         # Plot markers at data points
-        limit = option['axismax']
         hp = ()
         markerlabel = []
         for i, xval in enumerate(X):
-            if abs(X[i]) <= limit and abs(Y[i]) <= limit:
+            if  X[i] >= minx and X[i] <= maxx and \
+                Y[i] >= miny and Y[i] <= maxy:
                 h = plt.plot(X[i],Y[i],marker[i], markersize = markerSize, 
                      markerfacecolor = markercolor[i],
                      markeredgecolor = marker[i][1],
@@ -99,12 +99,10 @@ def plot_xy_markers(X,Y,option):
         # and no legend
         
         # Plot markers at data points
-        axismin = option['axismin']
-        axismax = option['axismax']
         rgba = clr.to_rgb(option['markercolor']) + (alpha,) 
         for i,xval in enumerate(X):
-            if X[i] >= axismin[index_x] and X[i] <= axismax[index_x] and \
-                        Y[i] >= axismin[index_y] and Y[i] <= axismax[index_y]:
+            if  X[i] >= minx and X[i] <= maxx and \
+                Y[i] >= miny and Y[i] <= maxy:
                 # Plot marker
                 marker = option['markersymbol']
                 plt.plot(X[i],Y[i],marker, markersize = markerSize, 
