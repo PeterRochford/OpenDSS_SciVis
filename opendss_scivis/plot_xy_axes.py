@@ -45,7 +45,9 @@ def plot_xy_axes(axes,option,subplot_axis):
     if plottype == 'linear':
 
         # Check whether to scale an axis to scientific notation
-        if option['axismax'][index_y-1] > 100.0:
+        key = option['variable']
+        maxy = option['axislim'][key][3]
+        if maxy > 100.0:
             # Set formatter of the major ticker
             ax = plt.gca()
             yScalarFormatter = ScalarFormatterClass(useMathText=True)
@@ -61,17 +63,17 @@ def plot_xy_axes(axes,option,subplot_axis):
             xlabelh = subplot_axis.set_xlabel(option['axeslabel'][index_x], fontsize = fontSize, \
                                  horizontalalignment = 'center')
         else:
-            raise ValueError("option['axeslabel'][" + str(index_x) + "] does not exist")
+            raise ValueError("option['axeslabel']['" + str(index_x) + "] does not exist")
 
     # Label y-axis
     xpos = 0
     ypos = axes['ytick'][-1] + 2*axes['ytick'][-1]/30
     if nlabel > 0:
-        if index_x >=0 and index_x < nlabel:
+        if index_y >=0 and index_y < nlabel:
             ylabelh = subplot_axis.set_ylabel(option['axeslabel'][index_y], fontsize = fontSize, \
                                  horizontalalignment = 'center')
         else:
-            raise ValueError("option['axeslabel'][" + str(index_x) + "] does not exist")
+            raise ValueError("option['axeslabel']['" + str(index_y) + "] does not exist")
 
     subplot_axis.tick_params(axis='both', direction='in', which='both') # have ticks inside plot
     
@@ -83,6 +85,6 @@ def plot_xy_axes(axes,option,subplot_axis):
     subplot_axis.spines['bottom'].set_linewidth(lineWidth)
 
 class ScalarFormatterClass(ScalarFormatter):
-   def _set_format(self):
-       # Specify only 1 significant digit after decimal place
-       self.format = "%1.1f"
+    def _set_format(self):
+        # Specify only 1 significant digit after decimal place
+        self.format = "%1.1f"
