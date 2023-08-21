@@ -11,11 +11,16 @@ def get_time_series(variables, CSVdata, **kwargs):
                 column headers of the CSV file.
                 If an empty list, then all time series variables are extracted
     data      : time series in a two-dimensional data structure with labeled axes
-    *kwargs : variable-length keyword argument list. ??The keywords by 
+    *kwargs : variable-length keyword argument list. The keywords by 
               definition are dictionaries with keys that must correspond to 
-              one choices given in OUTPUTS below.
+              one of the choices given in OPTIONS below.
     
     The format of data is a DataFrame as provided by the pandas.read_csv function. 
+
+    Options:
+    option : dictionary containing option values. (Refer to 
+             display_display_time_series_options function for more information.)
+    option['subsample'] : desired sub-sample interval for time series (Default : None)
 
     Output:
     timeSeriesData : extracted time series in a dictionary with each variable in its own separate
@@ -42,7 +47,7 @@ def get_time_series(variables, CSVdata, **kwargs):
 
     # Set default parameters for all options
     option = {}
-    option['subsample'] = 0
+    option['subsample'] = None
 
     # Check data types of input variables
     
@@ -77,7 +82,7 @@ def get_time_series(variables, CSVdata, **kwargs):
             if name in labels:
                 index = labels.index(name)
                 timeSeries = CSVdata.iloc[:,index].tolist()
-                if option['subsample'] > 0:
+                if option['subsample'] is not None:
                     step = option['subsample']
                     timeSeries = timeSeries[0:-1:step]
                 
