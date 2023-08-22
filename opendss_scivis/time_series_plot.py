@@ -39,14 +39,14 @@ def time_series_plot(*args, **kwargs):
     Created on Apr 22, 2022
     '''
     global number_cols, number_rows, subplot_axis
-    
-    # Check for number of arguments
+
     nargin = len(args)
     data = _get_time_series_plot_arguments(*args,**kwargs)
     if nargin == 0: return
     
     # Get options
-    option = get_time_series_plot_options(data,**kwargs)
+    option = get_time_series_plot_options(**kwargs)
+    
     #  Get time axis values for plot
     key_list = list(data)
     key = key_list[0]
@@ -79,6 +79,8 @@ def time_series_plot(*args, **kwargs):
             key = key_list[iplot+x]
             quantity = data[key].get('values')
     
+            option['variable'] = key
+            option['subplot'] = iplot
             option['index_y'] = iplot+x
             if nlabel == 0: 
                 units = data[key].get('units')
@@ -105,13 +107,17 @@ def time_series_plot(*args, **kwargs):
                 subplot_axis[x-1].legend(markerLabel)
         
         # Hide last subplot if odd number of subplots in 2 columns
-        if number_plots % 2 == 1 and number_cols > 1:
-            subplot_axis[-1].axes.get_xaxis().set_visible(False)
-            subplot_axis[-1].axes.get_yaxis().set_visible(False)
-            plt.box(False) #remove box
-        
-        # Adjust spacing between subplots to minimize the overlaps.
-        plt.tight_layout()
+        number_rows = math.ceil(number_plots / number_cols)
+        # Updated code to handle the box in the last plot
+        if number_cols == 2:
+            if number_plots % 2 == 1:
+                subplot_axis[-1].axis('off')
+                if number_rows > 1:
+                    subplot_index = (number_rows - 1) * number_cols
+                    subplot_axis[subplot_index].spines['top'].set_visible(True)
+                    subplot_axis[subplot_index].spines['right'].set_visible(True)
+                    subplot_axis[subplot_index].spines['bottom'].set_visible(True)
+                    subplot_axis[subplot_index].spines['left'].set_visible(True)
        
 def _get_time_series_plot_arguments(*args,**kwargs):
     '''
@@ -149,70 +155,58 @@ def _get_time_series_plot_arguments(*args,**kwargs):
 
 def _display_time_series_plot_options():
     '''
-    Displays available options for TAYLOR_DIAGRAM function.
+    Displays available options for TIME_SERIES_PLOT function.
     '''
     
-    _disp('ToDo: display_time_series_plot_options remains to be implemented!')
-    
-    # _disp('General options:')
-    # _dispopt("'numberPanels'",'1 or 2: Panels to display (1 for ' +
-    #          'positive correlations, 2 for positive and negative' +
-    #          ' correlations). \n\t\tDefault value depends on ' +
-    #          'correlations (CORs)')
-    # _dispopt("'overlay'","'on' / 'off' (default): " +
-    #     'Switch to overlay current statistics on Taylor diagram. ' +
-    #     '\n\t\tOnly markers will be displayed.')
-    # _dispopt("'alpha'","Blending of symbol face color (0.0 transparent through 1.0 opaque)" +
-    #          "\n\t\t" + "(Default: 1.0)")
-    # _dispopt("'axismax'",'Maximum for the radial contours')
-    # _dispopt("'colormap'","'on'/ 'off' (default): "  + 
-    #     "Switch to map color shading of markers to colormap ('on')\n\t\t"  +
-    #     "or min to max range of RMSDz values ('off').")
-    # _disp('')
-    #
-    # _disp('Marker options:')
-    # _dispopt("'MarkerDisplayed'",
-    #     "'marker' (default): Experiments are represented by individual " + 
-    #     "symbols\n\t\t"  + 
-    #     "'colorBar': Experiments are represented by a color described " + \
-    #     "in a colorbar")
-    # _disp("OPTIONS when 'MarkerDisplayed' == 'marker'")
-    # _dispopt("'markerLabel'",'Labels for markers')
-    # _dispopt("'markerLabelColor'",'Marker label color (Default: black)')
-    # _dispopt("'markerColor'",'Single color to use for all markers'  +
-    #     ' (Default: red)')
-    # _dispopt("'markerLegend'","'on' / 'off' (default): "  +
-    #     'Use legend for markers')
-    # _dispopt("'markerSize'",'Marker size (Default: 10)')
-    # _dispopt("'markerSymbol'","Marker symbol (Default: '.')")
-    #
-    # _disp("OPTIONS when MarkerDisplayed' == 'colorbar'")
-    # _dispopt("'cmapzdata'","Data values to use for " +
-    #         'color mapping of markers, e.g. RMSD or BIAS.\n\t\t' +
-    #         '(Used to make range of RMSDs values appear above color bar.)')
-    # _dispopt("'titleColorBar'",'Title of the colorbar.')
-    # _dispopt("'titleColorBar'",'Title of the colorbar.')
-    # _disp('')
-    #
-    # _disp('RMS axis options:')
-    # _dispopt("'tickRMS'",'RMS values to plot grid circles from ' +
-    #          'observation point')
-    # _dispopt("'rincRMS'",'axis tick increment for RMS values')
-    # _dispopt("'colRMS'",'RMS grid and tick labels color. (Default: green)')
-    # _dispopt("'showlabelsRMS'","'on' (default) / 'off': "  +
-    #     'Show the RMS tick labels')
-    # _dispopt("'tickRMSangle'",'Angle for RMS tick labels with the ' +
-    #          'observation point. Default: 135 deg.')
-    # _dispopt("'rmsLabelFormat'","String format for RMS contour labels, e.g. '0:.2f'.\n\t\t" +
-    #          "(Default '0', format as specified by str function.)")
-    # _dispopt("'styleRMS'",'Line style of the RMS grid')
-    # _dispopt("'widthRMS'",'Line width of the RMS grid')
-    # _dispopt("'labelRMS'","RMS axis label (Default 'RMSD')")
-    # _dispopt("'titleRMS'","'on' (default) / 'off': "  +
-    #     'Show RMSD axis title')
-    # _dispopt("'titleRMSDangle'","angle at which to display the 'RMSD' label for the\n\t\t" +
-    #          "RMSD contours (Default: 160 degrees)")
+    _disp('General options:')
+    _dispopt("'colormap'","'on'/ 'off' (default): "  + 
+        "Switch to map color shading of markers to colormap ('on')\n\t\t"  +
+        "or min to max range of RMSDz values ('off').")
+    _dispopt("'overlay'","'on' / 'off' (default): " +
+        'Switch to overlay current statistics on Taylor diagram. ' +
+        '\n\t\tOnly markers will be displayed.')
     _disp('')
+    
+    _disp('Marker options:')
+    _dispopt("'MarkerDisplayed'",
+        "'line' : use a continuous line (default)\n\t\t"  + 
+        "'marker' : disp0lay markers at provide points")
+    _disp("OPTIONS when 'MarkerDisplayed' == 'line'")
+    _dispopt("'lineSpec'","Line specification (default solid black, 'k-')")
+    _dispopt("'lineWidth'","Line width specification (default default rcParams " + 
+             "'lines.linewidth'")
+
+    _disp("OPTIONS when 'MarkerDisplayed' == 'marker'")
+    _dispopt("'alpha'","Blending of symbol face color (0.0 transparent through 1.0 opaque)" +
+             "\n\t\t" + "(Default: 1.0)")
+    _dispopt("'markerColor'",'Single color to use for all markers'  +
+        ' (Default: red)')
+    _dispopt("'markerLabel'",'Labels for markers. (Default: None)')
+    _dispopt("'markerLabelColor'",'Marker label color (Default: black)')
+    _dispopt("'markerLegend'","'on' / 'off' (default): "  +
+        'Use legend for markers')
+    _dispopt("'markers'",'Dictionary providing individual control of the marker label, ' + 
+             'label color, \n\t\t' + 
+             'symbol, size, face color, and edge color. (Default: none)')
+    _dispopt("'markerSize'",'Marker size (Default: 10)')
+    _dispopt("'markerSymbol'","Marker symbol (Default: '.')")
+    _disp('')
+    
+    _disp('Axes options:')
+    _dispopt("'axislim'",'Axes limits [xmin, xmax, ymin, ymax] (Default: data values)')
+    _dispopt("'ticks'",'Define tick positions (default is that used by axis function)')
+    _dispopt("'xtickLabelPos'",'Position of the tick labels along the x-axis ' + 
+             '(empty by default)')
+    _dispopt("'ytickLabelPos'",'Position of the tick labels along the y-axis ' + 
+             '(empty by default)')
+    _disp('')
+    
+    _disp('Plot options:')
+    _dispopt("'plotType'",
+        "'linear': Standard linear plot\n\t\t"  + 
+        "'loglog': Log scaling on both the x and y axis\n\t\t"  + 
+        "'semilogx': Log scaling on the x axis\n\t\t"  + 
+        "'semilogy' : Log scaling on the y axis")
 
 def _disp(text):
     print(text)
@@ -230,35 +224,28 @@ def _dispopt(optname,optval):
     _disp('\t\t%s' % optval)
 
 def _set_subplots(option):
-    '''
-    Sets matrix of subplots for figure
-
-    This is a support function for the time_series_plot function.
-    It sets the number of rows and columns for subplots on a figure and
-    sets the axes for the subplots.
-
-    '''
     global number_cols, number_rows, subplot_axis
 
     number_plots = option['nplots']
+    number_cols = option['layout'][1]
+
+    # Constrain number of columns to within number of plots
+    if number_cols > number_plots: number_cols = number_plots
+
     if option['overlay'] == 'off':
-        # Specify number of subplots per page
-        if number_plots < 4:
-            number_rows = number_plots
-            number_cols = 1
-            fig, ax = plt.subplots(number_rows,number_cols)
-            if number_plots == 1:
-                subplot_axis = []
-                subplot_axis.append(ax)
-            else:
-                subplot_axis = ax.flatten()
-        elif number_plots < 7:
-            number_rows = math.ceil(number_plots/2) 
-            number_cols = 2
-            fig, ax = plt.subplots(number_rows,number_cols,figsize =(8.5,11))
-            subplot_axis = ax.flatten()
-        else:
-            # To Do: Allow for subplots across multiple pages, 6 per each
-            raise ValueError('Not programmed to handle more than 6 subplots.')
+        number_rows = math.ceil(number_plots / number_cols)
         
-        return fig 
+        if number_plots < 4:
+            fig, ax = plt.subplots(number_rows, number_cols)
+        elif number_plots < 7:
+            fig, ax = plt.subplots(number_rows, number_cols, figsize=(8.5, 11))
+        else:
+            raise ValueError('Not programmed to handle more than 6 subplots.')
+
+        if number_plots == 1:
+            subplot_axis = []
+            subplot_axis.append(ax)
+        else:
+            subplot_axis = ax.flatten()
+
+        return fig
