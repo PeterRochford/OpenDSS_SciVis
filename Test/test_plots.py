@@ -50,13 +50,7 @@ tuples, and can make use of regular expressions (regex) for filename pattern
 matching that is supported by the glob module. For example to process all
 target and taylor scripts:
 
-SCRIPTS_TESTED = ("target*[0-9].py", "taylor*[0-9].py")
-
-To process only the target or taylor scripts:
-
-SCRIPTS_TESTED = ("target*[0-9].py", ) # target diagrams only, must be a tuple
-
-SCRIPTS_TESTED = ("taylor*[0-9].py", ) # Taylor diagrams only, must be a tuple
+SCRIPTS_TESTED = ("example*[0-9].py",)
 
 The list of files are processed in sorted alphabetical order.
 
