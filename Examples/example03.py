@@ -1,5 +1,5 @@
 '''
-How to plot a time series of single power system quantity in a CSV File.
+How to plot time series of multiple power system quantities in a CSV File.
 
 A third example of how to plot a subset of quantities in an OpenDSS CSV file 
 with user specified axes limits. The time range is limited to [0,4] seconds 
@@ -96,7 +96,7 @@ if __name__ == '__main__':
     plt.close('all')
         
     # Read data from OpenDSS CSV files
-    filename = 'C:\Data\INDUCES\OpenDSS\SciViz\SimpleDemo_Mon_g1out_1'
+    filename = 'SimpleDemo_Mon_g1out_1'
     data = osv.read_element_data(filename)
 
     # Extract data to be plotted
