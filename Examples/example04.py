@@ -91,7 +91,7 @@ if __name__ == '__main__':
     plt.close('all')
         
     # Read data from OpenDSS CSV files
-    filename = 'C:\Data\INDUCES\OpenDSS\SciViz\SimpleDemo_Mon_g1out_1'
+    filename = 'SimpleDemo_Mon_g1out_1'
     data = osv.read_element_data(filename)
 
     # Extract data to be plotted
