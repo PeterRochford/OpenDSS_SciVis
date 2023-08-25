@@ -1,5 +1,3 @@
-__version__='1.1.0'
-
 from .add_line_legend import add_line_legend
 from .add_marker_legend import add_marker_legend
 from .colname_stats import colname_stats
