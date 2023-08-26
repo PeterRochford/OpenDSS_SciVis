@@ -31,7 +31,7 @@ Created on Jun 7, 2023
 
 @author: kevin.wu@xatorcorp.com
 '''
-def colname_stats(file_ref, file_mod):
+def colname_stats(file_mod, file_ref):
     '''
     Calculate statistical metrics of the differences between Comma Separated Value (CSV) files
     for each column in the file.
@@ -53,13 +53,17 @@ def colname_stats(file_ref, file_mod):
     col_dict: a dictionary that contains dictionaries of statistical metrics
     '''
     
+    col_dict = {}
+
     # Get data from CSV files
     csv1 = read_element_data(file_ref)
     csv2 = read_element_data(file_mod)
-    # if csv1.shape == csv2.shape:
-    #     print("The files have the same size")
-    # else:
-    #     raise Exception("The file sizes do not match")
+
+    # Check if same number of rows
+    if not np.array_equal(csv1.shape[0], csv2.shape[0]):
+        col_dict['error'] = 'Mismatch in number of rows'
+        col_dict['success'] = 'Fail'
+        return col_dict
 
     '''
     Create a dictionary where the key is the column name and its values is another
@@ -76,7 +80,14 @@ def colname_stats(file_ref, file_mod):
     for col in csv1.columns:
         if 'Unnamed:' in col:
             break
+        
         metrics={}
+        if col not in csv2:
+            metrics['success'] = 'Missing'
+            col_dict[col.strip()] = metrics
+            file_success='Fail'
+            break
+            
         if not csv1[col].equals(csv2[col]):
             if csv1.shape[0]==csv2.shape[0]:
                 value_ref=np.array(csv1[col].tolist())
@@ -84,20 +95,20 @@ def colname_stats(file_ref, file_mod):
                 metrics['bias']= bias(value_model,value_ref)
                 metrics['crmsd']=centered_rms_dev(value_model,value_ref)
                 metrics['rmsd']=rmsd(value_model,value_ref)
-        
+    
+
                 sdevm = np.std(value_model)
                 sdevr = np.std(value_ref)
                 metrics['sdev'] = [sdevr, sdevm]
-                
                 if sdevm == 0 or sdevr == 0:
                     ccoef = -1
                 else:
                     ccoef=np.corrcoef(value_model,value_ref)
                     metrics['ccoef'] = ccoef[0]
-    
+
                 Bp = bias_percent(value_model,value_ref)
                 metrics['bias_percent'] = Bp
-                
+            
                 metrics['success'] = pass_fail(metrics)
                 if metrics['success']=='Fail':
                     file_success='Fail'
@@ -108,14 +119,13 @@ def colname_stats(file_ref, file_mod):
                     if len(csv1[column]) != len(csv2[column]):
                         column_mismatch = column
                         break
-
                     raise Exception(f"Column '{column_mismatch}' does not have the same number of rows. "
                         f"{file_mod} has {len(csv1)} rows and {file_ref} has {len(csv2)} rows.")
         else:
             metrics['success'] = 'Pass'
 
         col_dict[col] = metrics
-            
+    
     col_dict['success'] = file_success
 
     return col_dict
