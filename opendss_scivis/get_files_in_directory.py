@@ -22,8 +22,6 @@ def get_files_in_directory(directory):
         raise ValueError("Directory does not exist: " + directory)
     csv_files = []
     for file in os.listdir(directory):
-        extension = os.path.splitext(file)[1]
-        extension = extension.lower()
-        if extension == '.csv':
+        if file.endswith(".csv") or file.endswith(".CSV"):
             csv_files.append(file)
     return csv_files
